@@ -95,8 +95,21 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     displayableString() {
-      let checkbox = this.completed ? "[x]" : "[ ]";
-      return `${this.id}. ${checkbox} ${this.title} ${this.dueDate}`;
+      const checkbox = this.completed ? "[x]" : "[ ]";
+      let dueDateString = "";
+
+      if (this.dueDate < new Date()) {
+        // Overdue task
+        dueDateString = `${this.dueDate.toISOString().split("T")[0]} (Overdue)`;
+      } else if (this.dueDate.toDateString() === new Date().toDateString()) {
+        // Due today
+        dueDateString = ""; // Empty string for due today
+      } else {
+        // Due later
+        dueDateString = this.dueDate.toISOString().split("T")[0];
+      }
+
+      return `${this.id}. ${checkbox} ${this.title} ${dueDateString}`;
     }
   }
   Todo.init(
