@@ -59,7 +59,6 @@ module.exports = (sequelize, DataTypes) => {
     static async dueToday() {
       // FILL IN HERE TO RETURN ITEMS DUE tODAY
       const dueTodayResults = await Todo.findAll({
-        attributes: ["id", "title", "completed"],
         where: {
           dueDate: {
             [Op.eq]: new Date(),
@@ -97,7 +96,16 @@ module.exports = (sequelize, DataTypes) => {
 
     displayableString() {
       const checkbox = this.completed ? "[x]" : "[ ]";
-      return `${this.id}. ${checkbox} ${this.title} ${this.dueDate}`;
+      const formattedDueDate = new Date(this.dueDate)
+        .toISOString()
+        .split("T")[0];
+
+      switch (formattedDueDate) {
+        case new Date().toISOString().split("T")[0]:
+          return `${this.id}. ${checkbox} ${this.title}`;
+        default:
+          return `${this.id}. ${checkbox} ${this.title} ${formattedDueDate}`;
+      }
     }
   }
   Todo.init(
