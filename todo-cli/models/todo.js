@@ -96,11 +96,7 @@ module.exports = (sequelize, DataTypes) => {
 
     displayableString() {
       const checkbox = this.completed ? "[x]" : "[ ]";
-
-      // eslint-disable-next-line eqeqeq
-      return this.dueDate == new Date()
-        ? `${this.id}. ${checkbox} ${this.title}`
-        : `${this.id}. ${checkbox} ${this.title} ${this.dueDate}`;
+      return `${this.id}. ${checkbox} ${this.title} ${this.dueDate}`;
     }
   }
   Todo.init(
